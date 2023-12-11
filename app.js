@@ -1,15 +1,10 @@
 function GameBoard(){
     let gameBoard = [
-        ["x","","x"],
-        ["x","x","x"],
-        ["o","x","x"]
+        ["","",""],
+        ["","",""],
+        ["","",""]
     ];
-    // Just an idea to check the row, column, diag, antidiag from each selection and determine a winner
-    // whenever a move is made.
-    let row = [];
-    let column = [];
-    let diag = [];
-    let antidiag = [];
+    // returns the value of the current position on the gameboard
     const getSelection = (x, y) => gameBoard[y][x];
     const makeSelection = (x, y, selection) => {
         if (getSelection(x,y) === "" && selection === "x" || selection === "o"){
