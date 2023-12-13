@@ -1,5 +1,10 @@
 /**
- * TODO: Issue with checking for row on checkwinner.
+ * TODO: Update the ability to select computer players, which will require an algo.
+ * Switch current representation to an actual grid.
+ * Detect and display which player's turn it is.
+ * Allow player to select which symbol they want.
+ * Refactor some of the messier code.
+ * lastTurn might need to be reset if a winner is decided.
  */
 
 // Contains the functions for populating the gameBoard
@@ -42,11 +47,13 @@ const board = (function(){
         return false;
     }
     const getBoard = () => gameBoard;
-    const newGame = () => gameBoard = [
-        ["","",""],
-        ["","",""],
-        ["","",""]
-    ];
+    const newGame = () => {
+            gameBoard = [
+            ["","",""],
+            ["","",""],
+            ["","",""]
+        ];
+    }
     const toString = () => {
         let output = ""
         for (let i = 0; i < gameBoard.length; i++){
@@ -69,6 +76,7 @@ const board = (function(){
 const game = (function(){
     let lastTurn = "o";
     // check for the winner of the game
+
     const checkWinner = (x, y, selection, gameBoard) => {
         // checks diags only if a diagonal win is possible from the current selection
         if ((x === y) || 
@@ -114,10 +122,12 @@ const game = (function(){
                 return true;
             }
         }
-        return false;
+        return false; 
+        // ONLY return false after row AND column have been checked (and diag/anti if relevant)
     }
     // manage the turns of the game
     const takeTurn = (player1, player2, xinput, yinput, gameBoard) => {
+        // TODO: refactor this into a single function
         if (!player1.getWinner() && !player2.getWinner()){
             // check which player has the correct symbol
             if (player1.getSymbol() !== lastTurn){
@@ -158,8 +168,6 @@ const game = (function(){
                 }
             }
         }
-        console.log(lastTurn);
-        console.log(player1.getWinner() + " " + player2.getWinner());
     }
     return { takeTurn }
 })();
