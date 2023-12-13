@@ -1,5 +1,9 @@
 body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: gray;
+    height: 100vh;
 }
 .temp{
     display: flex;
@@ -10,4 +14,46 @@ body{
 }
 .test{
     white-space: pre;
+}
+.content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1200px;
+    max-height: 900px;
+    height: 75%;
+    width: 75%;
+    border-style: solid;
+}
+.top-controls{
+    display: flex;
+    width: 100%;
+    height: 20%;
+    border-style: solid;
+}
+.gameboard{
+    display: grid;
+    width: 50%;
+    height: 60%;
+    border-style: solid;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+}
+.gameboard div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-style: solid;
+}
+.gameboard div > button{
+    width: 100%;
+    height: 100%;
+    font-size: 800%;
+    padding:0;
+    margin:0;
+}
+.bottom-controls{
+    display: flex;
+    width: 100%;
+    height: 20%;
+    border-style: solid;
 }
