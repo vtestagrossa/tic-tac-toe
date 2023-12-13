@@ -199,16 +199,5 @@ function Player(name, symbol){
     }
     return { name, getSymbol, setWinner, getWinner };
 }
-/* const testBoard = document.getElementById('test-board');
-const submitBtn = document.getElementById('subBtn');
-const inputx = document.getElementById('x');
-const inputy = document.getElementById('y');
 const player1 = new Player('Test', 'x');
 const player2 = new Player('Test2', 'o');
-let currentPlayer = player1;
-submitBtn.addEventListener('click', () => {
-    game.takeTurn(player1, player2, inputx.value, inputy.value, board);
-    testBoard.textContent = board.toString();
-    console.log(board.toString());
-});
-testBoard.textContent = board.toString(); */
