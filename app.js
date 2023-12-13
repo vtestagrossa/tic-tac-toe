@@ -1,3 +1,7 @@
+/**
+ * TODO: Issue with checking for row on checkwinner.
+ */
+
 // Contains the functions for populating the gameBoard
 const board = (function(){
     let gameBoard = [
@@ -31,7 +35,6 @@ const board = (function(){
         }
         // all validation checks passed
         else{
-            console.log('test');
             gameBoard[y][x] = selection;
             return true;
         }
@@ -68,53 +71,50 @@ const game = (function(){
     // check for the winner of the game
     const checkWinner = (x, y, selection, gameBoard) => {
         // checks diags only if a diagonal win is possible from the current selection
-        if (x === y || 
-            (x === 0 && y === 2 
-            (x === 3 && y === 0 ))){
+        if ((x === y) || 
+            (x === '0' && y === '2') || 
+            (x === '2' && y === '0')
+            ) {
             //check diag  
-            for (let i = 0; i < gameBoard.length; i++){
-                if (gameBoard[i][i] !== selection){
-                    console.log('no match');
-                    return false;
+            for (let i = 0; i < gameBoard.getBoard().length; i++){
+                if (gameBoard.getBoard()[i][i] !== selection){
+                    break;
                 }
-                if (i === gameBoard.length - 1){
-                    console.log('winner on diag');
+                else if (i === gameBoard.getBoard().length - 1){
                     return true;
                 }
             }
             let j = 2;
             //check anti-diag
-            for (let i = 0; i < gameBoard.length; i++){
-                if (gameBoard[j][i] !== selection){
-                    return false;
+            for (let i = 0; i < gameBoard.getBoard().length; i++){
+                if (gameBoard.getBoard()[i][j] !== selection){
+                    break;
                 }
-                if (i === gameBoard.length - 1){
-                    console.log('winner on antidiag');
+                else if (i === gameBoard.getBoard().length - 1){
                     return true;
                 }
                 j--;
             }
         }
         // check current row
-        for (let i = 0; i < gameBoard.length; i++){
-            if (gameBoard[y][i] !== selection){
+        for (let i = 0; i < gameBoard.getBoard().length; i++){
+            if (gameBoard.getBoard()[y][i] !== selection){
                 break;
             }
-            if (i === gameBoard.length - 1){
-                console.log('winner on row');
+            else if (i === gameBoard.getBoard().length - 1){
                 return true;
             }
         }
         // check current column
-        for (let i = 0; i < gameBoard.length; i++){
-            if (gameBoard[i][x] !== selection){
-                return false;
+        for (let i = 0; i < gameBoard.getBoard().length; i++){
+            if (gameBoard.getBoard()[i][x] !== selection){
+                break;
             }
-            if (i === gameBoard.length - 1){
-                console.log('winner on column');
+            else if (i === gameBoard.getBoard().length - 1){
                 return true;
             }
         }
+        return false;
     }
     // manage the turns of the game
     const takeTurn = (player1, player2, xinput, yinput, gameBoard) => {
@@ -134,6 +134,9 @@ const game = (function(){
                 if (checkWinner(xinput, yinput, player1.getSymbol(), gameBoard)){
                     player1.setWinner();
                 }
+                else {
+                    console.log('p1: no winner');
+                }
             }            
             // check which player has the correct symbol
             else if (player2.getSymbol() !== lastTurn){
@@ -149,6 +152,9 @@ const game = (function(){
                 // check winner
                 if (checkWinner(xinput, yinput, player2.getSymbol(), gameBoard)){
                     player2.setWinner();
+                }
+                else {
+                    console.log('p2: no winner');
                 }
             }
         }
