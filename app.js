@@ -1,6 +1,6 @@
 /**
  * TODO: 
- * Grid layout is mocked up.
+ * Need an IIFE for display logic.
  * 
  * Update the ability to select computer players, which will require an algo.
  * Detect and display which player's turn it is.
@@ -8,6 +8,11 @@
  * Refactor some of the messier code.
  * lastTurn might need to be reset if a winner is decided.
  */
+
+const display = (function(){
+    //TODO: display logic goes here
+    
+})();
 
 // Contains the functions for populating the gameBoard
 const board = (function(){
