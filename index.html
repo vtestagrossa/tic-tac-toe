@@ -7,24 +7,14 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="temp">
-        <form class="temp-form">
-            <label for="x">X</label>
-            <input id="x" type="number" min="0" max="2" required>
-            <label for="y">Y</label>
-            <input id="y" type="number" min="0" max="2" required>
-            <button type="button" id="subBtn">Submit</button>
-        </form>
-        <p class="test" id="test-board"></p>
-    </div>
     <div class="content" id="content">
         <div class="top-controls" id="top-controls">
 
         </div>
         <div class="gameboard" id="gameboard">
-            <div><button>x</button></div><div></div><div></div>
-            <div></div><div></div><div></div>
-            <div></div><div></div><div></div>
+            <div x="0" y="0" id="00" class="grid-square"></div><div x="1" y="0" id="01" class="grid-square"></div><div x="2" y="0" id="02" class="grid-square"></div>
+            <div x="0" y="1" id="01" class="grid-square"></div><div x="1" y="1" id="11" class="grid-square"></div><div x="2" y="1" id="21" class="grid-square"></div>
+            <div x="0" y="2" id="02" class="grid-square"></div><div x="1" y="2" id="12" class="grid-square"></div><div x="2" y="2" id="22" class="grid-square"></div>
         </div>
         <div class="bottom-controls" id="bottom-controls">
 

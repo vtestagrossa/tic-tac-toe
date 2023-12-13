@@ -1,6 +1,8 @@
 /**
- * TODO: Update the ability to select computer players, which will require an algo.
- * Switch current representation to an actual grid.
+ * TODO: 
+ * Grid layout is mocked up.
+ * 
+ * Update the ability to select computer players, which will require an algo.
  * Detect and display which player's turn it is.
  * Allow player to select which symbol they want.
  * Refactor some of the messier code.
@@ -125,6 +127,12 @@ const game = (function(){
         return false; 
         // ONLY return false after row AND column have been checked (and diag/anti if relevant)
     }
+    const getTurn = () => {
+        if (lastTurn === 'o'){
+            return 'x';
+        }
+        return 'o';
+    }
     // manage the turns of the game
     const takeTurn = (player1, player2, xinput, yinput, gameBoard) => {
         // TODO: refactor this into a single function
@@ -169,7 +177,7 @@ const game = (function(){
             }
         }
     }
-    return { takeTurn }
+    return { takeTurn, getTurn }
 })();
 
 function Player(name, symbol){
@@ -186,7 +194,7 @@ function Player(name, symbol){
     }
     return { name, getSymbol, setWinner, getWinner };
 }
-const testBoard = document.getElementById('test-board');
+/* const testBoard = document.getElementById('test-board');
 const submitBtn = document.getElementById('subBtn');
 const inputx = document.getElementById('x');
 const inputy = document.getElementById('y');
@@ -198,4 +206,4 @@ submitBtn.addEventListener('click', () => {
     testBoard.textContent = board.toString();
     console.log(board.toString());
 });
-testBoard.textContent = board.toString();
+testBoard.textContent = board.toString(); */
