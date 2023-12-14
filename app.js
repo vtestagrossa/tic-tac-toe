@@ -9,10 +9,32 @@
  * lastTurn might need to be reset if a winner is decided.
  */
 
-const display = (function(){
-    //TODO: display logic goes here
-    
-})();
+/**
+ * Need to figure out a factory method for this
+ */
+/* function displayController (gameObject){
+    const game = gameObject;
+    const gridSquares = document.querySelectorAll('.grid-square');
+    let turn = "x";
+
+    const setGame = (gameObject) => {
+        game = gameObject;
+    }
+    const setTurn = (turn) => {
+        this.turn = turn;
+        gridSquares.forEach(square => {
+            square.addEventListener('click', () =>{
+                if (turn === 'x'){
+                    console.log('x');
+                }
+                else if (turn === 'y') {
+                    console.log('y');
+                }
+            });
+        });
+    } 
+    return { setGame, setTurn }
+} */
 
 // Contains the functions for populating the gameBoard
 const board = (function(){
@@ -83,7 +105,6 @@ const board = (function(){
 const game = (function(){
     let lastTurn = "o";
     // check for the winner of the game
-
     const checkWinner = (x, y, selection, gameBoard) => {
         // checks diags only if a diagonal win is possible from the current selection
         if ((x === y) || 
@@ -133,10 +154,7 @@ const game = (function(){
         // ONLY return false after row AND column have been checked (and diag/anti if relevant)
     }
     const getTurn = () => {
-        if (lastTurn === 'o'){
-            return 'x';
-        }
-        return 'o';
+        return lastTurn;
     }
     // manage the turns of the game
     const takeTurn = (player1, player2, xinput, yinput, gameBoard) => {
@@ -152,14 +170,17 @@ const game = (function(){
                 else {
                     // set the last turn to the current player's type
                     lastTurn = player1.getSymbol();
+                    console.log('turn successfully taken by player 1');
+                    // check winner
+                    if (checkWinner(xinput, yinput, player1.getSymbol(), gameBoard)){
+                        player1.setWinner();
+                    }
+                    else {
+                        console.log('p1: no winner');
+                    }
+                    return true;
                 }
-                // check winner
-                if (checkWinner(xinput, yinput, player1.getSymbol(), gameBoard)){
-                    player1.setWinner();
-                }
-                else {
-                    console.log('p1: no winner');
-                }
+                return false;
             }            
             // check which player has the correct symbol
             else if (player2.getSymbol() !== lastTurn){
@@ -171,18 +192,43 @@ const game = (function(){
                 else {
                     // set the last turn to the current player's type
                     lastTurn = player2.getSymbol();
-                }
-                // check winner
-                if (checkWinner(xinput, yinput, player2.getSymbol(), gameBoard)){
-                    player2.setWinner();
-                }
-                else {
-                    console.log('p2: no winner');
+                    console.log('turn successfully taken by player 2');
+                    // check winner
+                    if (checkWinner(xinput, yinput, player2.getSymbol(), gameBoard)){
+                        player2.setWinner();
+                    }
+                    else {
+                        console.log('p2: no winner');
+                    }
+                    return true;
                 }
             }
         }
+        return false;
     }
     return { takeTurn, getTurn }
+})();
+/**
+ * TODO: I think I need to put the displayController here, so it can be used by the game
+ * logic to update the view based on the flow of the game. 
+ */
+const controller = (function(){
+    const grid = document.querySelectorAll('.grid-square');
+    grid.forEach(square => {
+        square.addEventListener('click', () => {
+            if (game.takeTurn(player1, player2, square.getAttribute('x'), square.getAttribute('y'), board)){
+                if (game.getTurn() === 'x'){
+                    square.classList.add('grid-square-x');
+                }
+                else if (game.getTurn() === 'o'){
+                    square.classList.add('grid-square-o');
+                }
+                else{
+                    console.log("turn: " + game.getTurn());
+                }
+            }
+        });
+    });
 })();
 
 function Player(name, symbol){
