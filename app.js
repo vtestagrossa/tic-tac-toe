@@ -104,6 +104,16 @@ const board = (function(){
 // Contains the game's logic flow
 const game = (function(){
     let lastTurn = "o";
+
+    const getWinner = (player1, player2) => {
+        if (player1.getWinner()){
+            return player1;
+        }
+        else if (player2.getWinner()){
+            return player2;
+        }
+        return false;
+    }
     // check for the winner of the game
     const checkWinner = (x, y, selection, gameBoard) => {
         // checks diags only if a diagonal win is possible from the current selection
@@ -206,16 +216,17 @@ const game = (function(){
         }
         return false;
     }
-    return { takeTurn, getTurn }
+    return { takeTurn, getTurn, getWinner }
 })();
+
 /**
- * TODO: I think I need to put the displayController here, so it can be used by the game
- * logic to update the view based on the flow of the game. 
+ * 
  */
 const controller = (function(){
     const grid = document.querySelectorAll('.grid-square');
     grid.forEach(square => {
         square.addEventListener('click', () => {
+            // call the takeTurn Logic and use the result to display the correct squares
             if (game.takeTurn(player1, player2, square.getAttribute('x'), square.getAttribute('y'), board)){
                 if (game.getTurn() === 'x'){
                     square.classList.add('grid-square-x');
@@ -223,9 +234,11 @@ const controller = (function(){
                 else if (game.getTurn() === 'o'){
                     square.classList.add('grid-square-o');
                 }
-                else{
-                    console.log("turn: " + game.getTurn());
-                }
+            }
+            // call the detectWinner logic and use that to display the winner and the replay button.
+            if (game.getWinner(player1, player2) !== false){
+                //this works as intended. Need to connect the logic to an element on the page.
+                console.log(game.getWinner(player1, player2).name);
             }
         });
     });

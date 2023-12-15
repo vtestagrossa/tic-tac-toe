@@ -15,7 +15,7 @@ body{
     border-bottom: 0;
     height: 100%;
     width: 100%;
-    background-color: lightgray;
+    background-color:rgb(213, 220, 220);
 }
 .top-controls{
     display: flex;
@@ -25,11 +25,11 @@ body{
     border-top: 0;
     border-right: 0;
     border-left: 0;
+    background-color: rgb(161, 187, 203);
 }
 .top-controls:hover{
     position: relative;
     box-shadow: 0em 0.5em 1em black;
-    border-bottom: 0;
 }
 .gameboard{
     display: grid;
@@ -41,8 +41,6 @@ body{
     grid-template: repeat(3, 1fr) / repeat(3, 1fr);
     background-color: black;
     border-style: solid;
-    border-top: 0;
-    border-bottom: 0;
 }
 .gameboard:hover{
     position: relative;
@@ -57,20 +55,23 @@ body{
 }
 .grid-square-x{
     background: url(images/x.png);
+    background-color: white;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
 }
 .grid-square-o{
     background: url(images/o.png);
+    background-color: white;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
 }
 .grid-square:hover{
-    background-color: lightgray;
+    background-color: rgb(161, 187, 203);
 }
 .bottom-controls{
+    background-color: rgb(161, 187, 203);
     display: flex;
     width: 100%;
     height: 15%;
@@ -82,5 +83,4 @@ body{
 .bottom-controls:hover{
     position: relative;
     box-shadow: 0em -0.5em 1em black;
-    border-top: 0;
 }
