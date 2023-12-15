@@ -1,12 +1,29 @@
 /**
  * TODO: 
- * Update the ability to select computer players, which will require an algo.
- * Detect and display which player's turn it is.
+ * Detect a tie and end the game.
+ * Display which player's turn it is.
+ * Add the ability to select computer players, which will require an algo.
  * Allow player to select which symbol they want.
  * Refactor some of the messier code.
- * lastTurn might need to be reset if a winner is decided.
  */
 
+
+function Player(name, symbol){
+    let type = "human";
+    let winner = false;
+    const getSymbol = () => {
+        return symbol;
+    }
+    const setWinner = (isWinner) => {
+        winner = isWinner;
+    }
+    const getWinner = () => {
+        return winner;
+    }
+    return { name, getSymbol, setWinner, getWinner };
+}
+const player1 = new Player('Player X', 'x');
+const player2 = new Player('Player O', 'o');
 // Contains the functions for populating the gameBoard
 const board = (function(){
     let gameBoard = [
@@ -137,6 +154,12 @@ const game = (function(){
     const getTurn = () => {
         return lastTurn;
     }
+    const isTurn = (player) => {
+        if (player.getSymbol() !== lastTurn){
+            return true;
+        }
+        return false;
+    }
     // manage the turns of the game
     /**
      * TODO:  
@@ -193,7 +216,7 @@ const game = (function(){
         player2.setWinner(false);
         lastTurn = "o";
     }
-    return { takeTurn, getTurn, getWinner, startNew }
+    return { takeTurn, getTurn, isTurn, getWinner, startNew }
 })();
 
 // Handles control of the display
@@ -203,7 +226,6 @@ const controller = (function(){
     const resetBtn = document.createElement('button');
     const controls = document.getElementById('game-controls');
     resetBtn.classList.add('reset-button');
-
     resetBtn.addEventListener('click', () => {
         game.startNew(player1, player2);
         grid.forEach(square => {
@@ -211,17 +233,28 @@ const controller = (function(){
             square.classList.remove('grid-square-o');
         });
         resetBtn.parentNode.removeChild(resetBtn);
+        displayTurn(player1, player2);
     });
+    const displayTurn = (player1, player2) => {
+        if (game.isTurn(player1)){
+            gameInfo.textContent = player1.name + "'s turn!";
+        }
+        else if (game.isTurn(player2)){
+            gameInfo.textContent = player2.name + "'s turn!";
+        }
+    }
+    displayTurn(player1, player2);
     grid.forEach(square => {
         square.addEventListener('click', () => {
             // call the takeTurn Logic and use the result to display the correct squares
             if (game.takeTurn(player1, player2, square.getAttribute('x'), square.getAttribute('y'), board)){
-                if (game.getTurn() === 'x'){
+                if (game.getTurn() === player1.getSymbol()){
                     square.classList.add('grid-square-x');
                 }
-                else if (game.getTurn() === 'o'){
+                else if (game.getTurn() === player2.getSymbol()){
                     square.classList.add('grid-square-o');
                 }
+                displayTurn(player1, player2);
             }
             // call the detectWinner logic and use that to display the winner and the replay button.
             if (game.getWinner(player1, player2) !== false){
@@ -232,20 +265,3 @@ const controller = (function(){
         });
     });
 })();
-
-function Player(name, symbol){
-    let type = "human";
-    let winner = false;
-    const getSymbol = () => {
-        return symbol;
-    }
-    const setWinner = (isWinner) => {
-        winner = isWinner;
-    }
-    const getWinner = () => {
-        return winner;
-    }
-    return { name, getSymbol, setWinner, getWinner };
-}
-const player1 = new Player('Test', 'x');
-const player2 = new Player('Test2', 'o');
