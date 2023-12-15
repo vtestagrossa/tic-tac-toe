@@ -1,7 +1,6 @@
 /**
  * TODO: 
  * Detect a tie and end the game.
- * Display which player's turn it is.
  * Add the ability to select computer players, which will require an algo.
  * Allow player to select which symbol they want.
  * Refactor some of the messier code.
@@ -22,8 +21,26 @@ function Player(name, symbol){
     }
     return { name, getSymbol, setWinner, getWinner };
 }
+function openDialog() {
+    const dialog = document.getElementById('input-dialog');
+    dialog.showModal();
+}
+openDialog();
 const player1 = new Player('Player X', 'x');
 const player2 = new Player('Player O', 'o');
+const submitBtn = document.getElementById('submit');
+submitBtn.addEventListener('click', () => {
+    if (document.getElementById('input-form').checkValidity()){
+       player1.name = document.getElementById('name').value;
+       player2.name = document.getElementById('name2').value;
+       document.getElementById('game-info').textContent = player1.name + "'s turn!";
+       document.getElementById('input-dialog').close();
+    }
+    else{
+        alert('Please enter the values');
+    }
+})
+
 // Contains the functions for populating the gameBoard
 const board = (function(){
     let gameBoard = [
