@@ -52,7 +52,6 @@ const board = (function(){
         // get the selection
         else if (getSelection(x,y) !== ""){
             console.log("expected spot was full");
-            console.log(getSelection(x,y));
             return false;
         }
         // all validation checks passed
@@ -176,13 +175,9 @@ const game = (function(){
                 else {
                     // set the last turn to the current player's type
                     lastTurn = player1.getSymbol();
-                    console.log('turn successfully taken by player 1');
                     // check winner
                     if (checkWinner(xinput, yinput, player1.getSymbol(), gameBoard)){
                         player1.setWinner(true);
-                    }
-                    else {
-                        console.log('p1: no winner');
                     }
                     return true;
                 }
@@ -196,13 +191,9 @@ const game = (function(){
                 else {
                     // set the last turn to the current player's type
                     lastTurn = player2.getSymbol();
-                    console.log('turn successfully taken by player 2');
                     // check winner
                     if (checkWinner(xinput, yinput, player2.getSymbol(), gameBoard)){
                         player2.setWinner(true);
-                    }
-                    else {
-                        console.log('p2: no winner');
                     }
                     return true;
                 }
