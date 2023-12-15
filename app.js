@@ -1,40 +1,11 @@
 /**
  * TODO: 
- * Need an IIFE for display logic.
- * 
  * Update the ability to select computer players, which will require an algo.
  * Detect and display which player's turn it is.
  * Allow player to select which symbol they want.
  * Refactor some of the messier code.
  * lastTurn might need to be reset if a winner is decided.
  */
-
-/**
- * Need to figure out a factory method for this
- */
-/* function displayController (gameObject){
-    const game = gameObject;
-    const gridSquares = document.querySelectorAll('.grid-square');
-    let turn = "x";
-
-    const setGame = (gameObject) => {
-        game = gameObject;
-    }
-    const setTurn = (turn) => {
-        this.turn = turn;
-        gridSquares.forEach(square => {
-            square.addEventListener('click', () =>{
-                if (turn === 'x'){
-                    console.log('x');
-                }
-                else if (turn === 'y') {
-                    console.log('y');
-                }
-            });
-        });
-    } 
-    return { setGame, setTurn }
-} */
 
 // Contains the functions for populating the gameBoard
 const board = (function(){
@@ -167,15 +138,17 @@ const game = (function(){
         return lastTurn;
     }
     // manage the turns of the game
+    /**
+     * TODO:  
+     * Might refactor this to only take a single player as input, then keep the decision
+     * logic in the display function.
+     */
     const takeTurn = (player1, player2, xinput, yinput, gameBoard) => {
-        // TODO: refactor this into a single function
         if (!player1.getWinner() && !player2.getWinner()){
             // check which player has the correct symbol
             if (player1.getSymbol() !== lastTurn){
                 if (!gameBoard.makeSelection(xinput, yinput, player1.getSymbol())){
                     console.log('input was invalid.');
-                    /* xinput = prompt("pick your column (0-2)");
-                    yinput = prompt("pick your row (0-2)"); */
                 }
                 else {
                     // set the last turn to the current player's type
@@ -183,7 +156,7 @@ const game = (function(){
                     console.log('turn successfully taken by player 1');
                     // check winner
                     if (checkWinner(xinput, yinput, player1.getSymbol(), gameBoard)){
-                        player1.setWinner();
+                        player1.setWinner(true);
                     }
                     else {
                         console.log('p1: no winner');
@@ -196,8 +169,6 @@ const game = (function(){
             else if (player2.getSymbol() !== lastTurn){
                 if (!gameBoard.makeSelection(xinput, yinput, player2.getSymbol())){
                     console.log('input was invalid.');
-                    /* xinput = prompt("pick your column (0-2)");
-                    yinput = prompt("pick your row (0-2)"); */
                 }
                 else {
                     // set the last turn to the current player's type
@@ -205,7 +176,7 @@ const game = (function(){
                     console.log('turn successfully taken by player 2');
                     // check winner
                     if (checkWinner(xinput, yinput, player2.getSymbol(), gameBoard)){
-                        player2.setWinner();
+                        player2.setWinner(true);
                     }
                     else {
                         console.log('p2: no winner');
@@ -216,14 +187,31 @@ const game = (function(){
         }
         return false;
     }
-    return { takeTurn, getTurn, getWinner }
+    const startNew = (player1, player2) => {
+        board.newGame();
+        player1.setWinner(false);
+        player2.setWinner(false);
+        lastTurn = "o";
+    }
+    return { takeTurn, getTurn, getWinner, startNew }
 })();
 
-/**
- * 
- */
+// Handles control of the display
 const controller = (function(){
+    const gameInfo = document.getElementById('game-info');
     const grid = document.querySelectorAll('.grid-square');
+    const resetBtn = document.createElement('button');
+    const controls = document.getElementById('game-controls');
+    resetBtn.classList.add('reset-button');
+
+    resetBtn.addEventListener('click', () => {
+        game.startNew(player1, player2);
+        grid.forEach(square => {
+            square.classList.remove('grid-square-x');
+            square.classList.remove('grid-square-o');
+        });
+        resetBtn.parentNode.removeChild(resetBtn);
+    });
     grid.forEach(square => {
         square.addEventListener('click', () => {
             // call the takeTurn Logic and use the result to display the correct squares
@@ -237,8 +225,9 @@ const controller = (function(){
             }
             // call the detectWinner logic and use that to display the winner and the replay button.
             if (game.getWinner(player1, player2) !== false){
-                //this works as intended. Need to connect the logic to an element on the page.
-                console.log(game.getWinner(player1, player2).name);
+                gameInfo.textContent = game.getWinner(player1, player2).name + " wins!";
+                resetBtn.textContent = "Replay?";
+                controls.appendChild(resetBtn);
             }
         });
     });
@@ -250,8 +239,8 @@ function Player(name, symbol){
     const getSymbol = () => {
         return symbol;
     }
-    const setWinner = () => {
-        winner = true;
+    const setWinner = (isWinner) => {
+        winner = isWinner;
     }
     const getWinner = () => {
         return winner;
