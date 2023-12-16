@@ -119,3 +119,35 @@ body{
     position: relative;
     box-shadow: 0em -0.5em 1em black;
 }
+.input-dialog{
+    height: 30%;
+    width: 30%;
+    background-color: rgb(161, 187, 203);
+}
+.input-dialog:hover{
+    box-shadow: 0.5em 0.5em 1.5em black;
+}
+.input-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+.form-group{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 200%;
+    padding: 0;
+    margin: 5%;
+}
+.form-group button{
+    font-size: 100%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+.form-group input{
+    height: 2em;
+}

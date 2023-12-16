@@ -1,6 +1,6 @@
 /**
  * TODO: 
- * Detect a tie and end the game.
+ * Add heading to modal that says "Input Players' Names!"
  * Add the ability to select computer players, which will require an algo.
  * Allow player to select which symbol they want.
  * Refactor some of the messier code.
@@ -76,8 +76,6 @@ const board = (function(){
             gameBoard[y][x] = selection;
             return true;
         }
-        // default return value in case errors were missed
-        return false;
     }
     const getBoard = () => gameBoard;
     const newGame = () => {
@@ -108,6 +106,7 @@ const board = (function(){
 // Contains the game's logic flow
 const game = (function(){
     let lastTurn = "o";
+    let tie = false;
 
     const getWinner = (player1, player2) => {
         if (player1.getWinner()){
@@ -115,6 +114,9 @@ const game = (function(){
         }
         else if (player2.getWinner()){
             return player2;
+        }
+        else if (tie){
+            return "tie";
         }
         return false;
     }
@@ -164,7 +166,15 @@ const game = (function(){
                 return true;
             }
         }
-        return false; 
+        //check if all rows and columns are filled
+        for (let i = 0; i < gameBoard.getBoard().length; i++){
+            for (let j = 0; j < gameBoard.getBoard().length; j++){
+                if (gameBoard.getBoard()[i][j] === ""){
+                    return false;
+                }
+            }
+        }
+        return "tie"; 
         // ONLY return false after row AND column have been checked (and diag/anti if relevant)
     }
     const getTurn = () => {
@@ -193,7 +203,10 @@ const game = (function(){
                     // set the last turn to the current player's type
                     lastTurn = player1.getSymbol();
                     // check winner
-                    if (checkWinner(xinput, yinput, player1.getSymbol(), gameBoard)){
+                    if (checkWinner(xinput, yinput, player1.getSymbol(), gameBoard) === "tie"){
+                        tie = true;
+                    }
+                    else if (checkWinner(xinput, yinput, player1.getSymbol(), gameBoard)){
                         player1.setWinner(true);
                     }
                     return true;
@@ -209,7 +222,10 @@ const game = (function(){
                     // set the last turn to the current player's type
                     lastTurn = player2.getSymbol();
                     // check winner
-                    if (checkWinner(xinput, yinput, player2.getSymbol(), gameBoard)){
+                    if (checkWinner(xinput, yinput, player2.getSymbol(), gameBoard) === "tie"){
+                        tie = true;
+                    }
+                    else if (checkWinner(xinput, yinput, player2.getSymbol(), gameBoard)){
                         player2.setWinner(true);
                     }
                     return true;
@@ -223,6 +239,7 @@ const game = (function(){
         player1.setWinner(false);
         player2.setWinner(false);
         lastTurn = "o";
+        tie = false;
     }
     return { takeTurn, getTurn, isTurn, getWinner, startNew }
 })();
@@ -265,7 +282,12 @@ const controller = (function(){
                 displayTurn(player1, player2);
             }
             // call the detectWinner logic and use that to display the winner and the replay button.
-            if (game.getWinner(player1, player2) !== false){
+            if (game.getWinner(player1, player2) === "tie"){
+                gameInfo.textContent = "It's a tie!";
+                resetBtn.textContent = "Replay?";
+                controls.appendChild(resetBtn);
+            }
+            else if (game.getWinner(player1, player2) !== false){
                 gameInfo.textContent = game.getWinner(player1, player2).name + " wins!";
                 resetBtn.textContent = "Replay?";
                 controls.appendChild(resetBtn);
